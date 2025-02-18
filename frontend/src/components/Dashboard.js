@@ -21,8 +21,8 @@ const Dashboard = () => {
         <div key={monitor.id}>
           <h2>{monitor.name}</h2>
           <p>URL: {monitor.url}</p>
-          <p>Status: {monitor.status}</p>
-          <p>Last Checked: {new Date(monitor.last_checked_at).toLocaleString()}</p>
+          <p>Status: {monitor.status || 'Unknown'}</p>
+          <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
         </div>
       ))}
     </div>

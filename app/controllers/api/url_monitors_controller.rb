@@ -14,6 +14,7 @@ module Api
     def create
       @monitor = UrlMonitor.new(monitor_params)
       if @monitor.save
+        CheckUrlJob.perform_later(@monitor.id) # Schedule the job to run immediately
         render json: @monitor, status: :created
       else
         pp @monitor.errors.full_messages.join(", ")

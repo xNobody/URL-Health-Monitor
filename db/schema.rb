@@ -10,25 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_18_101824) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_18_160336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "checks", force: :cascade do |t|
-    t.integer "url_monitor_id"
+    t.integer "monitor_id"
     t.integer "status_code"
     t.float "response_time"
     t.datetime "checked_at"
     t.boolean "success"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "url_monitor_id", null: false
+    t.string "error_message"
+    t.index ["url_monitor_id"], name: "index_checks_on_url_monitor_id"
   end
 
   create_table "url_monitors", force: :cascade do |t|
     t.string "url"
     t.string "name"
     t.integer "check_interval"
-    t.string "status"
+    t.integer "status"
     t.datetime "last_checked_at"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -41,4 +44,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_101824) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "checks", "url_monitors"
 end
