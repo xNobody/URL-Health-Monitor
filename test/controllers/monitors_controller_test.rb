@@ -1,6 +1,6 @@
 require "test_helper"
 
-class MonitorsControllerTest < ActionDispatch::IntegrationTest
+class UrlMonitorsControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end

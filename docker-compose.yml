@@ -1,5 +1,3 @@
-# filepath: /Users/user/Documents/Projects/URL-Health-Monitor/docker-compose.yml
-version: '3'
 services:
   db:
     image: postgres:14

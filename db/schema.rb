@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_17_103500) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_18_101824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "checks", force: :cascade do |t|
-    t.integer "monitor_id"
+    t.integer "url_monitor_id"
     t.integer "status_code"
     t.float "response_time"
     t.datetime "checked_at"
@@ -24,7 +24,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_103500) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "monitors", force: :cascade do |t|
+  create_table "url_monitors", force: :cascade do |t|
     t.string "url"
     t.string "name"
     t.integer "check_interval"

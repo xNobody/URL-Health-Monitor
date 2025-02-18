@@ -5,17 +5,22 @@ const MonitorForm = () => {
   const [formData, setFormData] = useState({
     url: '',
     name: '',
-    check_interval: 5
+    check_interval: 5,
+    user_id: 1
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/monitors', formData)
+    console.log('Form Data:', formData); // Add this line to debug form data
+    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }) // Ensure the URL matches your Rails server URL and uses HTTPS
       .then(response => {
         alert('Monitor added successfully!');
         window.location.href = '/';
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error('Error adding monitor:', error);
+        alert('Failed to add monitor. Please try again.');
+      });
   };
 
   return (
