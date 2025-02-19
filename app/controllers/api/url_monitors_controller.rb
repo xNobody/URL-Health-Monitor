@@ -17,13 +17,13 @@ module Api
         CheckUrlJob.perform_later(@monitor.id) # Schedule the job to run immediately
         render json: @monitor, status: :created
       else
-        pp @monitor.errors.full_messages.join(", ")
         render json: @monitor.errors, status: :unprocessable_entity
       end
     end
 
     def update
       if @monitor.update(monitor_params)
+        puts "Updated check_interval: #{@monitor.check_interval}" # Debugging line
         render json: @monitor
       else
         render json: @monitor.errors, status: :unprocessable_entity
