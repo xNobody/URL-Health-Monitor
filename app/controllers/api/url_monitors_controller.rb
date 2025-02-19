@@ -1,6 +1,6 @@
 module Api
   class UrlMonitorsController < ApplicationController
-    before_action :set_monitor, only: %i[show update destroy]
+    before_action :set_monitor, only: %i[show update destroy history]
 
     def index
       @monitors = UrlMonitor.all
@@ -32,6 +32,11 @@ module Api
 
     def destroy
       @monitor.destroy
+    end
+
+    def history
+      checks = @monitor.checks.order(checked_at: :asc)
+      render json: checks
     end
 
     private
