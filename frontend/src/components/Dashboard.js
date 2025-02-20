@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+import './Dashboard.css'; // Import the CSS file
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
@@ -55,10 +56,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Monitored URLs</h1>
       {monitors.map(monitor => (
-        <div key={monitor.id}>
+        <div key={monitor.id} className="monitor">
           <h2>{monitor.name}</h2>
           <p>URL: {monitor.url}</p>
           <p>Status: {monitor.status || 'Unknown'}</p>

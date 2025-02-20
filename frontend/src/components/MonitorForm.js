@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './MonitorForm.css';
 
 const MonitorForm = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +12,8 @@ const MonitorForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData); // Add this line to debug form data
-    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }) // Ensure the URL matches your Rails server URL and uses HTTPS
+    console.log('Form Data:', formData);
+    axios.post('http://localhost:3000/api/url_monitors', { url_monitor: formData })
       .then(response => {
         alert('Monitor added successfully!');
         window.location.href = '/';
@@ -24,27 +25,31 @@ const MonitorForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="URL"
-        value={formData.url}
-        onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-      />
-      <input
-        type="text"
-        placeholder="Name"
-        value={formData.name}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Check Interval"
-        value={formData.check_interval}
-        onChange={(e) => setFormData({ ...formData, check_interval: e.target.value })}
-      />
-      <button type="submit">Add Monitor</button>
-    </form>
+    <div className="monitor-form-container">
+      <h1>Add Monitor</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="URL"
+          value={formData.url}
+          onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Check Interval"
+          value={formData.check_interval}
+          min='5'
+          onChange={(e) => setFormData({ ...formData, check_interval: e.target.value })}
+        />
+        <button type="submit">Add Monitor</button>
+      </form>
+    </div>
   );
 };
 
