@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+import './Dashboard.css'; // Import the CSS file
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [historyData, setHistoryData] = useState({});
+  const [visibleCharts, setVisibleCharts] = useState({});
 
   useEffect(() => {
     axios.get('https://localhost:3000/api/url_monitors')
@@ -15,7 +17,6 @@ const Dashboard = () => {
         const monitors = response.data;
         setMonitors(monitors);
 
-        // Fetch history data for each monitor
         monitors.forEach(monitor => {
           axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`)
             .then(historyResponse => {
@@ -46,16 +47,26 @@ const Dashboard = () => {
     };
   };
 
+  const toggleChartVisibility = (monitorId) => {
+    setVisibleCharts(prevVisibleCharts => ({
+      ...prevVisibleCharts,
+      [monitorId]: !prevVisibleCharts[monitorId]
+    }));
+  };
+
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Monitored URLs</h1>
       {monitors.map(monitor => (
-        <div key={monitor.id}>
+        <div key={monitor.id} className="monitor">
           <h2>{monitor.name}</h2>
           <p>URL: {monitor.url}</p>
           <p>Status: {monitor.status || 'Unknown'}</p>
           <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
-          <Line data={getChartData(monitor.id)} />
+          <button onClick={() => toggleChartVisibility(monitor.id)}>
+            {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}
+          </button>
+          {visibleCharts[monitor.id] && <Line data={getChartData(monitor.id)} />}
         </div>
       ))}
     </div>
