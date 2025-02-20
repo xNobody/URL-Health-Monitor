@@ -16,6 +16,9 @@ const Login = () => {
         email,
         password,
       });
+      const token = response.data.token;
+      console.log('Token received:', token); // Debugging line
+      localStorage.setItem('token', token);
       setMessage(response.data.message);
       localStorage.setItem('user_id', response.data.user_id);
       navigate('/');

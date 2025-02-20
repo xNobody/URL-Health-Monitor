@@ -3,8 +3,14 @@ module Api
     before_action :set_monitor, only: %i[show update destroy history]
 
     def index
-      @monitors = UrlMonitor.all
-      render json: @monitors
+      if @current_user
+        pp "Current user: #{@current_user.email}"
+        @monitors = @current_user.url_monitors
+        render json: @monitors
+      else
+        pp "No current user"
+        render json: { error: "Not Authorized" }, status: 401
+      end
     end
 
     def show
@@ -12,7 +18,7 @@ module Api
     end
 
     def create
-      @monitor = UrlMonitor.new(monitor_params)
+      @monitor = @current_user.url_monitors.new(monitor_params)
       if @monitor.save
         CheckUrlJob.perform_later(@monitor.id) # Schedule the job to run immediately
         render json: @monitor, status: :created
@@ -23,7 +29,6 @@ module Api
 
     def update
       if @monitor.update(monitor_params)
-        puts "Updated check_interval: #{@monitor.check_interval}" # Debugging line
         render json: @monitor
       else
         render json: @monitor.errors, status: :unprocessable_entity
@@ -42,11 +47,11 @@ module Api
     private
 
     def set_monitor
-      @monitor = UrlMonitor.find(params[:id])
+      @monitor = @current_user.url_monitors.find(params[:id])
     end
 
     def monitor_params
-      params.require(:url_monitor).permit(:url, :name, :check_interval, :status, :last_checked_at, :user_id)
+      params.require(:url_monitor).permit(:url, :name, :check_interval, :status, :last_checked_at)
     end
   end
 end

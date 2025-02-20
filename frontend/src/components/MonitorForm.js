@@ -12,7 +12,12 @@ const MonitorForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/api/url_monitors', { url_monitor: formData })
+    const token = localStorage.getItem('token');
+    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then(response => {
         alert('Monitor added successfully!');
         window.location.href = '/';

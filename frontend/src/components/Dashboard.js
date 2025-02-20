@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
-import './Dashboard.css'; // Import the CSS file
+import './Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
@@ -12,13 +12,28 @@ const Dashboard = () => {
   const [visibleCharts, setVisibleCharts] = useState({});
 
   useEffect(() => {
-    axios.get('https://localhost:3000/api/url_monitors')
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+    console.log('Token:', token); // Debugging line
+    axios.get('https://localhost:3000/api/url_monitors', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then(response => {
+        console.log('Monitors response:', response.data); // Debugging line
         const monitors = response.data;
         setMonitors(monitors);
 
         monitors.forEach(monitor => {
-          axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`)
+          axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
             .then(historyResponse => {
               setHistoryData(prevHistoryData => ({
                 ...prevHistoryData,
