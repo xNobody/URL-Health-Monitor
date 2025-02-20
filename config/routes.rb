@@ -9,10 +9,12 @@ Rails.application.routes.draw do
   root "home#index"
 
   namespace :api do
-    resources :url_monitors, only: [:index, :show, :create, :update, :destroy] do
+    resources :url_monitors, only: [ :index, :show, :create, :update, :destroy ] do
       member do
         get :history
       end
     end
+    resources :users, only: [ :create ]
+    resources :sessions, only: [ :create, :destroy ]
   end
 end

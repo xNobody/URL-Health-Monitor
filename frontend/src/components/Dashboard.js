@@ -8,6 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, Linear
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [historyData, setHistoryData] = useState({});
+  const [visibleCharts, setVisibleCharts] = useState({});
 
   useEffect(() => {
     axios.get('https://localhost:3000/api/url_monitors')
@@ -46,6 +47,13 @@ const Dashboard = () => {
     };
   };
 
+  const toggleChartVisibility = (monitorId) => {
+    setVisibleCharts(prevVisibleCharts => ({
+      ...prevVisibleCharts,
+      [monitorId]: !prevVisibleCharts[monitorId]
+    }));
+  };
+
   return (
     <div>
       <h1>Monitored URLs</h1>
@@ -55,7 +63,10 @@ const Dashboard = () => {
           <p>URL: {monitor.url}</p>
           <p>Status: {monitor.status || 'Unknown'}</p>
           <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
-          <Line data={getChartData(monitor.id)} />
+          <button onClick={() => toggleChartVisibility(monitor.id)}>
+            {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}
+          </button>
+          {visibleCharts[monitor.id] && <Line data={getChartData(monitor.id)} />}
         </div>
       ))}
     </div>
