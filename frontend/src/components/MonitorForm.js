@@ -12,7 +12,6 @@ const MonitorForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
     axios.post('http://localhost:3000/api/url_monitors', { url_monitor: formData })
       .then(response => {
         alert('Monitor added successfully!');

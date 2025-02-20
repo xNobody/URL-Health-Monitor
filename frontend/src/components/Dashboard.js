@@ -17,7 +17,6 @@ const Dashboard = () => {
         const monitors = response.data;
         setMonitors(monitors);
 
-        // Fetch history data for each monitor
         monitors.forEach(monitor => {
           axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`)
             .then(historyResponse => {

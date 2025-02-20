@@ -7,7 +7,7 @@ body {
     color: #2c3e50;
 }
 
-.login-container {
+.signup-container {
     width: 320px;
     height: auto;
     background-color: #ecf0f1;
@@ -22,25 +22,25 @@ body {
     box-shadow: 0px 0px 5px #000;
 }
 
-.login-container h1 {
+.signup-container h1 {
     margin: 0;
     padding: 20px 0 20px 0;
     text-align: center;
     font-size: 22px;
 }
 
-.login-container label {
+.signup-container label {
     margin: 0;
     padding: 0;
     font-weight: bold;
 }
 
-.login-container input {
+.signup-container input {
     width: 100%;
     margin-bottom: 20px;
 }
 
-.login-container input[type="email"], .login-container input[type="password"] {
+.signup-container input[type="email"], .signup-container input[type="password"], .signup-container input[type="text"] {
     border: none;
     border-bottom: 1px solid #2c3e50;
     outline: none;
@@ -50,7 +50,7 @@ body {
     margin-top: 15px;
 }
 
-.login-container button {
+.signup-container button {
     border: none;
     outline: none;
     height: 50px;
@@ -65,41 +65,25 @@ body {
     margin: 20px auto 0 auto;
 }
 
-.login-container button:hover {
+.signup-container button:hover {
     cursor: pointer;
     background: linear-gradient(45deg, #130f40, #2c3e50);
     color: #ffffff;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
 }
 
-.or-text {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 16px;
-    color: #2c3e50;
-}
-
-.signup-button {
-    margin-top: 10px;
-    background: linear-gradient(45deg, #34495e, #2c3e50);
-}
-
-.signup-button:hover {
-    background: linear-gradient(45deg, #2c3e50, #34495e);
-}
-
-.login-container a {
+.signup-container a {
     text-decoration: none;
     font-size: 12px;
     line-height: 20px;
     color: #2c3e50;
 }
 
-.login-container a:hover {
+.signup-container a:hover {
     text-decoration: underline;
 }
 
-.login-container p {
+.signup-container p {
     text-align: center;
     color: rgb(0, 0, 0);
 }

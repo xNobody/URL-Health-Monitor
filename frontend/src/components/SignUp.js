@@ -1,40 +1,39 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import './SignUp.css';
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:3000/api/sessions', {
-        email,
-        password,
+      const response = await axios.post('https://localhost:3000/api/users', {
+        user: {
+          email,
+          password,
+          password_confirmation: passwordConfirmation,
+        },
       });
       setMessage(response.data.message);
-      localStorage.setItem('user_id', response.data.user_id);
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       if (error.response) {
-        setMessage(error.response.data.error);
+        setMessage(error.response.data.errors.join(', '));
       } else {
         setMessage('An error occurred. Please try again.');
       }
     }
   };
 
-  const handleSignUp = () => {
-    navigate('/signup');
-  };
-
   return (
-    <div className="login-container">
-      <h1>Login</h1>
+    <div className="signup-container">
+      <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -54,13 +53,20 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <div>
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            value={passwordConfirmation}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Sign Up</button>
       </form>
       {message && <p>{message}</p>}
-      <p className="or-text">or</p>
-      <button onClick={handleSignUp} className="signup-button">Sign Up</button>
     </div>
   );
 };
 
-export default Login;
+export default SignUp;
