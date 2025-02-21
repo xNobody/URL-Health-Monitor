@@ -4,14 +4,15 @@ import MonitorForm from './components/MonitorForm';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Layout from './components/Layout';
+import AuthRoute from './components/AuthRoute';
 
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/add-monitor" element={<MonitorForm />} />
+          <Route path="/" element={<AuthRoute element={Dashboard} />} />
+          <Route path="/add-monitor" element={<AuthRoute element={MonitorForm} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
         </Routes>

@@ -23,8 +23,10 @@ const Layout = ({ children }) => {
               <Link to="/">
                 <img src="/url_health_monitor_logo_2.png" alt="Logo" className="logo" />
               </Link>
-              <Link to="/">Dashboard</Link>
-              <Link to="/add-monitor">Add Monitor</Link>
+            </div>
+            <div className="navbar-tabs">
+              <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Dashboard</Link>
+              <Link to="/add-monitor" className={location.pathname === '/add-monitor' ? 'active' : ''}>Add Monitor</Link>
             </div>
             <div className="navbar-links">
               <button onClick={handleLogout} className="logout-button">Logout</button>
