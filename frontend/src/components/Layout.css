@@ -7,22 +7,48 @@
 header {
   background-color: #007bff;
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-nav {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-nav a {
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand a {
   color: white;
   text-decoration: none;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
   margin-right: 10px;
 }
 
-nav a:hover {
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 16px;
+}
+
+.navbar-links a:hover {
   text-decoration: underline;
 }
 
@@ -30,9 +56,10 @@ nav a:hover {
   background-color: #dc3545;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  font-size: 16px;
 }
 
 .logout-button:hover {

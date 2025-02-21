@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Layout.css'; // Import the CSS file
+import './Layout.css';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
@@ -14,10 +14,17 @@ const Layout = ({ children }) => {
   return (
     <div className="layout-container">
       <header>
-        <nav>
-          <Link to="/">Dashboard</Link>
-          <Link to="/add-monitor">Add Monitor</Link>
-          <button onClick={handleLogout} className="logout-button">Logout</button>
+        <nav className="navbar">
+          <div className="navbar-brand">
+            <Link to="/">
+              <img src="/url_health_monitor_logo_2.png" alt="Logo" className="logo" />
+            </Link>
+            <Link to="/">Dashboard</Link>
+            <Link to="/add-monitor">Add Monitor</Link>
+          </div>
+          <div className="navbar-links">
+            <button onClick={handleLogout} className="logout-button">Logout</button>
+          </div>
         </nav>
       </header>
       <main>
