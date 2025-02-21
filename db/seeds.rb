@@ -7,7 +7,7 @@ end
 url_monitors = UrlMonitor.create([
   { name: 'Example Monitor 1', url: 'http://example1.com', check_interval: 5, user: user },
   { name: 'Example Monitor 2', url: 'http://example2.com', check_interval: 10, user: user },
-  { name: 'Google Monitor', url: 'http://google.com', check_interval: 1, user: user }
+  { name: 'Google Monitor', url: 'http://google.com', check_interval: 5, user: user }
 ])
 
 # Check if the URL monitors were saved successfully

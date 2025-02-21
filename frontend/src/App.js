@@ -3,16 +3,19 @@ import Dashboard from './components/Dashboard';
 import MonitorForm from './components/MonitorForm';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/add-monitor" element={<MonitorForm />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/add-monitor" element={<MonitorForm />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
