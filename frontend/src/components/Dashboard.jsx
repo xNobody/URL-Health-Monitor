@@ -17,14 +17,12 @@ const Dashboard = () => {
       console.error('No token found');
       return;
     }
-    console.log('Token:', token); // Debugging line
     axios.get('https://localhost:3000/api/url_monitors', {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
       .then(response => {
-        console.log('Monitors response:', response.data); // Debugging line
         const monitors = response.data;
         setMonitors(monitors);
 

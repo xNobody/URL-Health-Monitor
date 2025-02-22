@@ -20,7 +20,7 @@ module Api
     def create
       @monitor = @current_user.url_monitors.new(monitor_params)
       if @monitor.save
-        CheckUrlJob.perform_later(@monitor.id) # Schedule the job to run immediately
+        CheckUrlJob.perform_later(@monitor.id)
         render json: @monitor, status: :created
       else
         render json: @monitor.errors, status: :unprocessable_entity
