@@ -166,7 +166,6 @@ const Dashboard = () => {
           <option value="desc">Sort by Name (Z-A)</option>
         </select>
       </div>
-      <button onClick={() => setAddingMonitor(true)} className="add-button">Add Monitor</button>
       {filteredMonitors.length === 0 ? (
         <div className="watermark-message">
           <p>No URLs are being monitored. Please add a monitor to get started.</p>
