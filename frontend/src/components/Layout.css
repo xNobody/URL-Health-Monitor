@@ -120,7 +120,7 @@ header {
   border-radius: 5px;
   font-size: 16px;
   margin-top: 10px;
-  align-self: center; /* Center the button within the flex container */
+  align-self: center;
 }
 
 .logout-button:hover {
