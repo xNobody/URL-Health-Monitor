@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
@@ -50,13 +50,9 @@ const Dashboard = () => {
       .catch(error => console.error('Error fetching monitors:', error));
   }, []);
 
-  useEffect(() => {
-    handleFilterAndSort();
-  }, [filter, sortOrder, monitors]);
-
-  const handleFilterAndSort = () => {
-    let filtered = monitors.filter(monitor => 
-      monitor.name.toLowerCase().includes(filter.toLowerCase()) || 
+  const handleFilterAndSort = useCallback(() => {
+    let filtered = monitors.filter(monitor =>
+      monitor.name.toLowerCase().includes(filter.toLowerCase()) ||
       monitor.url.toLowerCase().includes(filter.toLowerCase())
     );
 
@@ -69,7 +65,11 @@ const Dashboard = () => {
     });
 
     setFilteredMonitors(filtered);
-  };
+  }, [monitors, filter, sortOrder]);
+
+  useEffect(() => {
+    handleFilterAndSort();
+  }, [filter, sortOrder, monitors, handleFilterAndSort]);
 
   const getChartData = (monitorId) => {
     const history = historyData[monitorId] || [];

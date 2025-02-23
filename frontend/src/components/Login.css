@@ -68,7 +68,7 @@ body {
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
     transition: background 0.5s, color 0.5s, box-shadow 0.5s;
     display: block;
-    margin: 20px auto 0 auto; /* Center the button */
+    margin: 20px auto 0 auto;
 }
 
 .login-container button:hover {

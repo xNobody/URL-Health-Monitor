@@ -4,11 +4,9 @@ module Api
 
     def index
       if @current_user
-        pp "Current user: #{@current_user.email}"
         @monitors = @current_user.url_monitors
         render json: @monitors
       else
-        pp "No current user"
         render json: { error: "Not Authorized" }, status: 401
       end
     end

@@ -8,10 +8,7 @@ class ApplicationController < ActionController::API
     header = header.split(" ").last if header
     decoded = decode_token(header)
     @current_user = User.find(decoded["user_id"]) if decoded
-    if @current_user
-      pp "Authenticated user: #{@current_user.email}"
-    else
-      pp "Authentication failed"
+    unless @current_user
       render json: { error: "Not Authorized" }, status: 401
     end
   end

@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    render json: { message: 'Welcome to the URL Health Monitor!' }
+    render json: { message: "Welcome to the URL Health Monitor!" }
   end
 end
