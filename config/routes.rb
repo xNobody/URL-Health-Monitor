@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         get :history
       end
     end
-    resources :users, only: [ :create ]
+    resources :users, only: [ :create, :show ]
     resources :sessions, only: [ :create, :destroy ]
   end
 end

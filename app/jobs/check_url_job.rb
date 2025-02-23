@@ -5,7 +5,6 @@ class CheckUrlJob < ApplicationJob
     monitor = UrlMonitor.find(monitor_id)
     monitor.perform_check
 
-    # Reschedule the job based on the check_interval
     CheckUrlJob.set(wait: monitor.check_interval.minutes).perform_later(monitor.id)
   rescue StandardError => e
     monitor.checks.create!(
@@ -15,7 +14,6 @@ class CheckUrlJob < ApplicationJob
     )
     monitor.update(status: "down", last_checked_at: Time.current)
 
-    # Reschedule the job based on the check_interval
     CheckUrlJob.set(wait: monitor.check_interval.minutes).perform_later(monitor.id)
   end
 end

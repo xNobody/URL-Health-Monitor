@@ -16,6 +16,7 @@ body {
     border: 5px solid #34495e;
     border-radius: 10px;
     box-shadow: 0px 0px 5px #000;
+    padding: 20px;
 }
 
 .dashboard-container h1 {
@@ -24,10 +25,38 @@ body {
     margin-bottom: 20px;
 }
 
+.filter-sort-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filter-sort-container input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
+.filter-sort-container select {
+    width: 25%;
+    padding: 10px;
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
 .dashboard-container .monitor {
     margin-bottom: 20px;
     padding: 10px;
     border-bottom: 1px solid #34495e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-container .monitor h2 {
@@ -37,6 +66,15 @@ body {
 
 .dashboard-container .monitor p {
     margin: 5px 0;
+}
+
+.dashboard-container .monitor .monitor-details {
+    flex-grow: 1;
+}
+
+.dashboard-container .monitor .monitor-buttons {
+    display: flex;
+    align-items: center;
 }
 
 .dashboard-container .monitor button {
@@ -50,8 +88,7 @@ body {
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     transition: background 0.5s, color 0.5s, box-shadow 0.5s;
-    display: block;
-    margin: 10px 0;
+    margin: 0 5px;
 }
 
 .dashboard-container .monitor button:hover {
@@ -59,4 +96,47 @@ body {
     background: linear-gradient(45deg, #130f40, #2c3e50);
     color: #ffffff;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+}
+
+.edit-button {
+    background-color: #28a745;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.watermark-message {
+    text-align: center;
+    color: #888;
+    font-size: 18px;
+    margin-top: 50px;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-up {
+    background-color: green;
+}
+
+.status-down {
+    background-color: red;
+}
+
+.status-unknown {
+    background-color: grey;
 }

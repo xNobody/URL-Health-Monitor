@@ -1,5 +1,5 @@
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 
 class UrlMonitor < ApplicationRecord
   belongs_to :user
@@ -18,7 +18,7 @@ class UrlMonitor < ApplicationRecord
     start_time = Time.current
 
     response = nil
-    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
       request = Net::HTTP::Get.new(uri)
       response = http.request(request)
     end
@@ -33,7 +33,7 @@ class UrlMonitor < ApplicationRecord
     )
 
     update(
-      status: response.is_a?(Net::HTTPSuccess) ? 'up' : 'down',
+      status: response.is_a?(Net::HTTPSuccess) ? "up" : "down",
       last_checked_at: Time.current
     )
   rescue StandardError => e
@@ -44,7 +44,7 @@ class UrlMonitor < ApplicationRecord
       checked_at: Time.current,
       error_message: e.message
     )
-    update(status: 'down', last_checked_at: Time.current)
+    update(status: "down", last_checked_at: Time.current)
   end
 
   private

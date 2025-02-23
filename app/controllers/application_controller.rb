@@ -4,7 +4,18 @@ class ApplicationController < ActionController::API
   private
 
   def authenticate_request
-    @current_user = User.find_by(id: request.headers['X-User-ID'])
-    render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+    header = request.headers["Authorization"]
+    header = header.split(" ").last if header
+    decoded = decode_token(header)
+    @current_user = User.find(decoded["user_id"]) if decoded
+    unless @current_user
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+  def decode_token(token)
+    JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
+  rescue
+    nil
   end
 end

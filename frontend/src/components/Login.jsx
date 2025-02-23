@@ -16,6 +16,8 @@ const Login = () => {
         email,
         password,
       });
+      const token = response.data.token;
+      localStorage.setItem('token', token);
       setMessage(response.data.message);
       localStorage.setItem('user_id', response.data.user_id);
       navigate('/');
@@ -34,6 +36,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <img src="/url_health_monitor_logo_2.png" alt="Logo" className="login-logo" />
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
