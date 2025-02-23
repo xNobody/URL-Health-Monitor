@@ -5,7 +5,7 @@
 }
 
 header {
-  background-color: #007bff;
+  background-color: white;
   color: white;
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -43,7 +43,7 @@ header {
 }
 
 .navbar-tabs a {
-  color: white;
+  color: #34495e;
   text-decoration: none;
   margin-right: 20px;
   font-size: 16px;
@@ -53,7 +53,7 @@ header {
 
 .navbar-tabs a:hover {
   text-decoration: none;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #34495e;
 }
 
 .navbar-tabs a.active {
@@ -63,7 +63,7 @@ header {
 .navbar-links {
   display: flex;
   align-items: center;
-  margin-left: auto; /* Push the links to the right */
+  margin-left: auto; 
 }
 
 .user-menu {
@@ -87,7 +87,7 @@ header {
 .hamburger-icon .line {
   width: 25px;
   height: 3px;
-  background-color: white;
+  background-color: #34495e;
 }
 
 .dropdown-menu {
@@ -101,6 +101,9 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content horizontally */
 }
 
 .dropdown-menu p {
@@ -117,6 +120,7 @@ header {
   border-radius: 5px;
   font-size: 16px;
   margin-top: 10px;
+  align-self: center; /* Center the button within the flex container */
 }
 
 .logout-button:hover {

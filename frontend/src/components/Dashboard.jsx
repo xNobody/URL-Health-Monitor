@@ -2,14 +2,19 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+import MonitorForm from './MonitorForm';
 import './Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
+  const [filteredMonitors, setFilteredMonitors] = useState([]);
   const [historyData, setHistoryData] = useState({});
   const [visibleCharts, setVisibleCharts] = useState({});
+  const [editingMonitor, setEditingMonitor] = useState(null);
+  const [filter, setFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -25,6 +30,7 @@ const Dashboard = () => {
       .then(response => {
         const monitors = response.data;
         setMonitors(monitors);
+        setFilteredMonitors(monitors);
 
         monitors.forEach(monitor => {
           axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`, {
@@ -43,6 +49,27 @@ const Dashboard = () => {
       })
       .catch(error => console.error('Error fetching monitors:', error));
   }, []);
+
+  useEffect(() => {
+    handleFilterAndSort();
+  }, [filter, sortOrder, monitors]);
+
+  const handleFilterAndSort = () => {
+    let filtered = monitors.filter(monitor => 
+      monitor.name.toLowerCase().includes(filter.toLowerCase()) || 
+      monitor.url.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    filtered.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+
+    setFilteredMonitors(filtered);
+  };
 
   const getChartData = (monitorId) => {
     const history = historyData[monitorId] || [];
@@ -81,20 +108,47 @@ const Dashboard = () => {
   };
 
   const handleEdit = (monitorId) => {
-    // Implement the edit functionality here
-    // You can navigate to an edit page or open a modal with the monitor details
-    console.log(`Edit monitor ${monitorId}`);
+    const monitor = monitors.find(m => m.id === monitorId);
+    setEditingMonitor(monitor);
+  };
+
+  const handleSave = (updatedMonitor) => {
+    const token = localStorage.getItem('token');
+    axios.put(`https://localhost:3000/api/url_monitors/${updatedMonitor.id}`, { url_monitor: updatedMonitor }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setMonitors(monitors.map(m => (m.id === updatedMonitor.id ? response.data : m)));
+        setEditingMonitor(null);
+      })
+      .catch(error => {
+        console.error('Error updating monitor:', error);
+      });
   };
 
   return (
     <div className="dashboard-container">
       <h1>Monitored URLs</h1>
-      {monitors.length === 0 ? (
+      <div className="filter-sort-container">
+        <input
+          type="text"
+          placeholder="Search by Name or URL"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="asc">Sort by Name (A-Z)</option>
+          <option value="desc">Sort by Name (Z-A)</option>
+        </select>
+      </div>
+      {filteredMonitors.length === 0 ? (
         <div className="watermark-message">
           <p>No URLs are being monitored. Please add a monitor to get started.</p>
         </div>
       ) : (
-        monitors.map(monitor => (
+        filteredMonitors.map(monitor => (
           <div key={monitor.id} className="monitor">
             <div className="monitor-details">
               <h2>{monitor.name}</h2>
@@ -112,6 +166,13 @@ const Dashboard = () => {
             </div>
           </div>
         ))
+      )}
+      {editingMonitor && (
+        <MonitorForm
+          initialData={editingMonitor}
+          onSubmit={handleSave}
+          onClose={() => setEditingMonitor(null)}
+        />
       )}
     </div>
   );

@@ -1,43 +1,31 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './MonitorForm.css';
 
-const MonitorForm = () => {
+const MonitorForm = ({ initialData, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
     url: '',
     name: '',
     check_interval: 5,
-    user_id: 1
+    ...initialData
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        alert('Monitor added successfully!');
-        window.location.href = '/';
-      })
-      .catch(error => {
-        console.error('Error adding monitor:', error);
-        alert('Failed to add monitor. Please try again.');
-      });
+    onSubmit(formData);
   };
 
   return (
     <div className="monitor-form-container">
-      <h1>Add Monitor</h1>
+      <h1>{initialData ? 'Edit Monitor' : 'Add Monitor'}</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="URL"
           value={formData.url}
           onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+          disabled={!!initialData}
         />
+        {initialData && <p className="edit-mode-message">* Changing the URL will result in loss of history</p>}
         <input
           type="text"
           placeholder="Name"
@@ -51,7 +39,10 @@ const MonitorForm = () => {
           min='5'
           onChange={(e) => setFormData({ ...formData, check_interval: e.target.value })}
         />
-        <button type="submit">Add Monitor</button>
+        <div className="form-buttons">
+          <button type="submit">{initialData ? 'Save Changes' : 'Add Monitor'}</button>
+          {onClose && <button type="button" onClick={onClose}>Cancel</button>}
+        </div>
       </form>
     </div>
   );

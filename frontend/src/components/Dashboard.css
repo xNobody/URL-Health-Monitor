@@ -24,6 +24,26 @@ body {
     margin-bottom: 20px;
 }
 
+.filter-sort-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filter-sort-container input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
+.filter-sort-container select {
+    width: 25%;
+    padding: 10px;
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
 .dashboard-container .monitor {
     margin-bottom: 20px;
     padding: 10px;
@@ -31,7 +51,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
 }
 
 .dashboard-container .monitor h2 {
@@ -50,9 +69,6 @@ body {
 .dashboard-container .monitor .monitor-buttons {
     display: flex;
     align-items: center;
-    position: absolute;
-    right: 10px;
-    top: 10px;
 }
 
 .dashboard-container .monitor button {
