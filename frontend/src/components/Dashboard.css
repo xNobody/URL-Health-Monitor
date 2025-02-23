@@ -28,6 +28,10 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     border-bottom: 1px solid #34495e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }
 
 .dashboard-container .monitor h2 {
@@ -37,6 +41,18 @@ body {
 
 .dashboard-container .monitor p {
     margin: 5px 0;
+}
+
+.dashboard-container .monitor .monitor-details {
+    flex-grow: 1;
+}
+
+.dashboard-container .monitor .monitor-buttons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 
 .dashboard-container .monitor button {
@@ -50,8 +66,7 @@ body {
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     transition: background 0.5s, color 0.5s, box-shadow 0.5s;
-    display: block;
-    margin: 10px 0;
+    margin: 0 5px;
 }
 
 .dashboard-container .monitor button:hover {
@@ -59,4 +74,27 @@ body {
     background: linear-gradient(45deg, #130f40, #2c3e50);
     color: #ffffff;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+}
+
+.edit-button {
+    background-color: #28a745;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.watermark-message {
+    text-align: center;
+    color: #888;
+    font-size: 18px;
+    margin-top: 50px;
 }

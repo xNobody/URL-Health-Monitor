@@ -67,21 +67,52 @@ const Dashboard = () => {
     }));
   };
 
+  const handleDelete = (monitorId) => {
+    const token = localStorage.getItem('token');
+    axios.delete(`https://localhost:3000/api/url_monitors/${monitorId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(() => {
+        setMonitors(monitors.filter(monitor => monitor.id !== monitorId));
+      })
+      .catch(error => console.error(`Error deleting monitor ${monitorId}:`, error));
+  };
+
+  const handleEdit = (monitorId) => {
+    // Implement the edit functionality here
+    // You can navigate to an edit page or open a modal with the monitor details
+    console.log(`Edit monitor ${monitorId}`);
+  };
+
   return (
     <div className="dashboard-container">
       <h1>Monitored URLs</h1>
-      {monitors.map(monitor => (
-        <div key={monitor.id} className="monitor">
-          <h2>{monitor.name}</h2>
-          <p>URL: {monitor.url}</p>
-          <p>Status: {monitor.status || 'Unknown'}</p>
-          <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
-          <button onClick={() => toggleChartVisibility(monitor.id)}>
-            {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}
-          </button>
-          {visibleCharts[monitor.id] && <Line data={getChartData(monitor.id)} />}
+      {monitors.length === 0 ? (
+        <div className="watermark-message">
+          <p>No URLs are being monitored. Please add a monitor to get started.</p>
         </div>
-      ))}
+      ) : (
+        monitors.map(monitor => (
+          <div key={monitor.id} className="monitor">
+            <div className="monitor-details">
+              <h2>{monitor.name}</h2>
+              <p>URL: {monitor.url}</p>
+              <p>Status: {monitor.status || 'Unknown'}</p>
+              <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
+              <button onClick={() => toggleChartVisibility(monitor.id)}>
+                {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}
+              </button>
+              {visibleCharts[monitor.id] && <Line data={getChartData(monitor.id)} />}
+            </div>
+            <div className="monitor-buttons">
+              <button onClick={() => handleEdit(monitor.id)} className="edit-button">Edit</button>
+              <button onClick={() => handleDelete(monitor.id)} className="delete-button">Remove</button>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 };

@@ -1,15 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import './Layout.css';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('user_id');
+    if (token && userId) {
+      axios.get(`https://localhost:3000/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        setUserEmail(response.data.email);
+      })
+      .catch(error => {
+        console.error('Error fetching user details:', error);
+      });
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user_id');
     navigate('/login');
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
@@ -29,7 +54,21 @@ const Layout = ({ children }) => {
               <Link to="/add-monitor" className={location.pathname === '/add-monitor' ? 'active' : ''}>Add Monitor</Link>
             </div>
             <div className="navbar-links">
-              <button onClick={handleLogout} className="logout-button">Logout</button>
+              <div className="user-menu">
+                <button onClick={toggleDropdown} className="user-button">
+                  <div className="hamburger-icon">
+                    <div className="line"></div>
+                    <div className="line"></div>
+                    <div className="line"></div>
+                  </div>
+                </button>
+                {isDropdownOpen && (
+                  <div className="dropdown-menu">
+                    <p>Email: {userEmail}</p>
+                    <button onClick={handleLogout} className="logout-button">Logout</button>
+                  </div>
+                )}
+              </div>
             </div>
           </nav>
         </header>

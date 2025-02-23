@@ -66,6 +66,48 @@ header {
   margin-left: auto; /* Push the links to the right */
 }
 
+.user-menu {
+  position: relative;
+}
+
+.user-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 20px;
+}
+
+.hamburger-icon .line {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.dropdown-menu p {
+  margin: 0;
+  padding: 5px 0;
+}
+
 .logout-button {
   background-color: #dc3545;
   color: white;
@@ -74,6 +116,7 @@ header {
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  margin-top: 10px;
 }
 
 .logout-button:hover {
