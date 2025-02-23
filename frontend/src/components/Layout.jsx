@@ -64,7 +64,7 @@ const Layout = ({ children }) => {
                 </button>
                 {isDropdownOpen && (
                   <div className="dropdown-menu">
-                    <p>Email: {userEmail}</p>
+                    <p>User email: {userEmail}</p>
                     <button onClick={handleLogout} className="logout-button">Logout</button>
                   </div>
                 )}

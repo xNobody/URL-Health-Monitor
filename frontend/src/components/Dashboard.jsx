@@ -128,6 +128,10 @@ const Dashboard = () => {
       });
   };
 
+  const getStatusClass = (status) => {
+    return status === 'up' ? 'status-pill status-up' : 'status-pill status-down';
+  };
+
   return (
     <div className="dashboard-container">
       <h1>Monitored URLs</h1>
@@ -153,7 +157,7 @@ const Dashboard = () => {
             <div className="monitor-details">
               <h2>{monitor.name}</h2>
               <p>URL: {monitor.url}</p>
-              <p>Status: {monitor.status || 'Unknown'}</p>
+              <p>Status: <span className={getStatusClass(monitor.status)}>{monitor.status || 'Unknown'}</span></p>
               <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
               <button onClick={() => toggleChartVisibility(monitor.id)}>
                 {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}

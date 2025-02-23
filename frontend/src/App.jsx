@@ -6,7 +6,7 @@ import Login from './components/Login';
 import Layout from './components/Layout';
 import AuthRoute from './components/AuthRoute';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Layout>
