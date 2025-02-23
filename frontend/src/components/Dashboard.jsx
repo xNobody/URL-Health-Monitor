@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [historyData, setHistoryData] = useState({});
   const [visibleCharts, setVisibleCharts] = useState({});
   const [editingMonitor, setEditingMonitor] = useState(null);
+  const [addingMonitor, setAddingMonitor] = useState(false);
   const [filter, setFilter] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
 
@@ -128,6 +129,22 @@ const Dashboard = () => {
       });
   };
 
+  const handleAdd = (newMonitor) => {
+    const token = localStorage.getItem('token');
+    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: newMonitor }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        setMonitors([...monitors, response.data]);
+        setAddingMonitor(false);
+      })
+      .catch(error => {
+        console.error('Error adding monitor:', error);
+      });
+  };
+
   const getStatusClass = (status) => {
     if (status === 'up') return 'status-pill status-up';
     if (status === 'down') return 'status-pill status-down';
@@ -149,6 +166,7 @@ const Dashboard = () => {
           <option value="desc">Sort by Name (Z-A)</option>
         </select>
       </div>
+      <button onClick={() => setAddingMonitor(true)} className="add-button">Add Monitor</button>
       {filteredMonitors.length === 0 ? (
         <div className="watermark-message">
           <p>No URLs are being monitored. Please add a monitor to get started.</p>
@@ -178,6 +196,12 @@ const Dashboard = () => {
           initialData={editingMonitor}
           onSubmit={handleSave}
           onClose={() => setEditingMonitor(null)}
+        />
+      )}
+      {addingMonitor && (
+        <MonitorForm
+          onSubmit={handleAdd}
+          onClose={() => setAddingMonitor(false)}
         />
       )}
     </div>

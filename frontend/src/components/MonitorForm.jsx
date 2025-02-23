@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './MonitorForm.css';
 
 const MonitorForm = ({ initialData, onSubmit, onClose }) => {
@@ -9,9 +10,40 @@ const MonitorForm = ({ initialData, onSubmit, onClose }) => {
     ...initialData
   });
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        url: initialData.url,
+        name: initialData.name,
+        check_interval: initialData.check_interval,
+      });
+    }
+  }, [initialData]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const token = localStorage.getItem('token');
+    const request = initialData
+      ? axios.put(`https://localhost:3000/api/url_monitors/${initialData.id}`, { url_monitor: formData }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      : axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+    request
+      .then(response => {
+        alert(`Monitor ${initialData ? 'updated' : 'added'} successfully!`);
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error(`Error ${initialData ? 'updating' : 'adding'} monitor:`, error);
+        alert(`Failed to ${initialData ? 'update' : 'add'} monitor. Please try again.`);
+      });
   };
 
   return (
