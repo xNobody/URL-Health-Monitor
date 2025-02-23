@@ -129,7 +129,9 @@ const Dashboard = () => {
   };
 
   const getStatusClass = (status) => {
-    return status === 'up' ? 'status-pill status-up' : 'status-pill status-down';
+    if (status === 'up') return 'status-pill status-up';
+    if (status === 'down') return 'status-pill status-down';
+    return 'status-pill status-unknown';
   };
 
   return (
