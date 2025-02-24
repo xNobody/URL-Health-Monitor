@@ -1,62 +1,64 @@
-# README
+# URL Health Monitor
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+URL Health Monitor is a web application that allows users to monitor the health and status of various URLs. The application periodically checks the URLs and provides detailed information about their status and response times.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- User authentication (sign up, login)
+- Add, edit, and delete URL monitors
+- View the status and response times of monitored URLs
+- View historical data for each URL monitor
 
-* System dependencies
+## Prerequisites
 
-* Configuration
+Before you begin, ensure you have the following installed on your machine:
 
-* Database creation
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-* Database initialization
+## Getting Started
 
-* How to run the test suite
+Follow these steps to set up and run the application using Docker:
 
-* Services (job queues, cache servers, search engines, etc.)
+1. **Clone the repository:**
 
-* Deployment instructions
-
-* ...
-
-## Reverting the Project and Installations
-
-To completely remove the project and its dependencies from your system, follow these steps:
-
-1. **Remove the project directory**:
    ```sh
-   rm -rf /path/to/your/project
+   git clone https://github.com/xNobody/URL-Health-Monitor.git
+   cd URL-Health-Monitor
    ```
 
-2. **Uninstall Ruby gems**:
-   If you have installed any Ruby gems specifically for this project, you can uninstall them using:
+2. **Build and start the Docker containers:**
+
    ```sh
-   gem uninstall <gem_name>
+   docker compose down
+   docker system prune --all --force --volumes
+   docker compose up --build -d
    ```
 
-3. **Remove system dependencies**:
-   If you have installed any system dependencies, you may need to remove them manually. For example, on a Debian-based system:
-   ```sh
-   sudo apt-get remove --purge <package_name>
+3. **Access the application:**
+
+   Open your web browser and navigate to:
+
+   ```
+   http://localhost:3001
    ```
 
-4. **Clean up configuration files**:
-   Remove any configuration files that were created for this project. These might be located in your home directory or other system directories.
+4. **Sign up for a new account or log in with an existing account.**
 
-5. **Drop the database**:
-   If you have created a database for this project, you can drop it using your database management tool. For example, with PostgreSQL:
-   ```sh
-   dropdb <database_name>
-   ```
+5. **Start adding and monitoring URLs!**
 
-6. **Remove environment variables**:
-   If you have set any environment variables for this project, you can unset them in your shell configuration file (e.g., `.bashrc`, `.zshrc`).
+## Stopping the Application
 
-7. **Remove services**:
-   If you have set up any services (e.g., job queues, cache servers), make sure to stop and remove them.
+To stop the Docker containers, run:
 
-By following these steps, you should be able to completely revert the project and its installations from your system.
+```sh
+docker compose down
+```
+
+## Cleaning Up
+
+To remove all Docker containers, images, and volumes, run:
+
+```sh
+docker system prune --all --force --volumes
+```
