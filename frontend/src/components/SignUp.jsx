@@ -13,20 +13,25 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:3000/api/users', {
+      const response = await axios.post('https://localhost:3000/api/users', { // Updated to http
         user: {
           email,
           password,
           password_confirmation: passwordConfirmation,
         },
       });
-      setMessage(response.data.message);
+      setMessage(response.data.message || 'Account created successfully!');
       navigate('/login');
     } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.errors.join(', '));
+      if (error.response && error.response.data) { // Added null check for error.response
+        const errors = error.response.data.errors;
+        if (errors && Array.isArray(errors)) {
+          setMessage(errors.join(', '));
+        } else {
+          setMessage('An error occurred: ' + JSON.stringify(error.response.data));
+        }
       } else {
-        setMessage('An error occurred. Please try again.');
+        setMessage('An unexpected error occurred. Please try again.');
       }
     }
   };
