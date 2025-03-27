@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './MonitorForm.css';
 
 const MonitorForm = ({ initialData = {}, onSubmit, onClose }) => {
@@ -22,24 +21,30 @@ const MonitorForm = ({ initialData = {}, onSubmit, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const request = initialData.id
-      ? axios.put(`https://localhost:3000/api/url_monitors/${initialData.id}`, { url_monitor: formData }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-      : axios.post('https://localhost:3000/api/url_monitors', { url_monitor: formData }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+    const url = initialData.id
+      ? `https://localhost:3000/api/url_monitors/${initialData.id}`
+      : 'https://localhost:3000/api/url_monitors';
+    const method = initialData.id ? 'PUT' : 'POST';
 
-    request
-      .then(response => {
+    fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ url_monitor: formData }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to ${initialData.id ? 'update' : 'add'} monitor`);
+        }
+        return response.json();
+      })
+      .then(() => {
         alert(`Monitor ${initialData.id ? 'updated' : 'added'} successfully!`);
         window.location.href = '/';
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(`Error ${initialData.id ? 'updating' : 'adding'} monitor:`, error);
         alert(`Failed to ${initialData.id ? 'update' : 'add'} monitor. Please try again.`);
       });
@@ -67,7 +72,7 @@ const MonitorForm = ({ initialData = {}, onSubmit, onClose }) => {
           type="number"
           placeholder="Check Interval"
           value={formData.check_interval}
-          min='5'
+          min="5"
           onChange={(e) => setFormData({ ...formData, check_interval: e.target.value })}
         />
         <div className="form-buttons">

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard Component Snapshot matches the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="dashboard-container"
+  >
+    <h1>
+      Monitored URLs
+    </h1>
+    <div
+      class="filter-sort-container"
+    >
+      <input
+        placeholder="Search by Name or URL"
+        type="text"
+        value=""
+      />
+      <select>
+        <option
+          value="asc"
+        >
+          Sort by Name (A-Z)
+        </option>
+        <option
+          value="desc"
+        >
+          Sort by Name (Z-A)
+        </option>
+      </select>
+    </div>
+    <div
+      class="watermark-message"
+    >
+      <p>
+        No URLs are being monitored. Please add a monitor to get started.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

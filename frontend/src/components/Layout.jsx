@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import './Layout.css';
 
 const Layout = ({ children }) => {
@@ -13,17 +12,23 @@ const Layout = ({ children }) => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('user_id');
     if (token && userId) {
-      axios.get(`https://localhost:3000/api/users/${userId}`, {
+      fetch(`https://localhost:3000/api/users/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then(response => {
-        setUserEmail(response.data.email);
-      })
-      .catch(error => {
-        console.error('Error fetching user details:', error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch user details');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setUserEmail(data.email);
+        })
+        .catch((error) => {
+          console.error('Error fetching user details:', error);
+        });
     }
   }, []);
 
