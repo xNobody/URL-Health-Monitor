@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
@@ -12,21 +11,27 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:3000/api/sessions', {
-        email,
-        password,
+      const response = await fetch('https://localhost:3000/api/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
-      const token = response.data.token;
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'An error occurred. Please try again.');
+      }
+
+      const data = await response.json();
+      const token = data.token;
       localStorage.setItem('token', token);
-      setMessage(response.data.message);
-      localStorage.setItem('user_id', response.data.user_id);
+      setMessage(data.message);
+      localStorage.setItem('user_id', data.user_id);
       navigate('/');
     } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.error);
-      } else {
-        setMessage('An error occurred. Please try again.');
-      }
+      setMessage(error.message);
     }
   };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
 import MonitorForm from './MonitorForm';
@@ -23,36 +22,50 @@ const Dashboard = () => {
       console.error('No token found');
       return;
     }
-    axios.get('https://localhost:3000/api/url_monitors', {
+
+    // Fetch monitors
+    fetch('https://localhost:3000/api/url_monitors', {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(response => {
-        const monitors = response.data;
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch monitors');
+        }
+        return response.json();
+      })
+      .then((monitors) => {
         setMonitors(monitors);
         setFilteredMonitors(monitors);
 
-        monitors.forEach(monitor => {
-          axios.get(`https://localhost:3000/api/url_monitors/${monitor.id}/history`, {
+        // Fetch history for each monitor
+        monitors.forEach((monitor) => {
+          fetch(`https://localhost:3000/api/url_monitors/${monitor.id}/history`, {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           })
-            .then(historyResponse => {
-              setHistoryData(prevHistoryData => ({
+            .then((historyResponse) => {
+              if (!historyResponse.ok) {
+                throw new Error(`Failed to fetch history for monitor ${monitor.id}`);
+              }
+              return historyResponse.json();
+            })
+            .then((history) => {
+              setHistoryData((prevHistoryData) => ({
                 ...prevHistoryData,
-                [monitor.id]: historyResponse.data
+                [monitor.id]: history,
               }));
             })
-            .catch(error => console.error(`Error fetching history for monitor ${monitor.id}:`, error));
+            .catch((error) => console.error(error));
         });
       })
-      .catch(error => console.error('Error fetching monitors:', error));
+      .catch((error) => console.error(error));
   }, []);
 
   const handleFilterAndSort = useCallback(() => {
-    let filtered = monitors.filter(monitor =>
+    let filtered = monitors.filter((monitor) =>
       monitor.name.toLowerCase().includes(filter.toLowerCase()) ||
       monitor.url.toLowerCase().includes(filter.toLowerCase())
     );
@@ -75,11 +88,11 @@ const Dashboard = () => {
   const getChartData = (monitorId) => {
     const history = historyData[monitorId] || [];
     return {
-      labels: history.map(entry => new Date(entry.checked_at).toLocaleString()),
+      labels: history.map((entry) => new Date(entry.checked_at).toLocaleString()),
       datasets: [
         {
           label: 'Response Time (ms)',
-          data: history.map(entry => entry.response_time),
+          data: history.map((entry) => entry.response_time),
           fill: false,
           backgroundColor: 'rgba(75,192,192,0.4)',
           borderColor: 'rgba(75,192,192,1)',
@@ -89,60 +102,82 @@ const Dashboard = () => {
   };
 
   const toggleChartVisibility = (monitorId) => {
-    setVisibleCharts(prevVisibleCharts => ({
+    setVisibleCharts((prevVisibleCharts) => ({
       ...prevVisibleCharts,
-      [monitorId]: !prevVisibleCharts[monitorId]
+      [monitorId]: !prevVisibleCharts[monitorId],
     }));
   };
 
   const handleDelete = (monitorId) => {
     const token = localStorage.getItem('token');
-    axios.delete(`https://localhost:3000/api/url_monitors/${monitorId}`, {
+    fetch(`https://localhost:3000/api/url_monitors/${monitorId}`, {
+      method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(() => {
-        setMonitors(monitors.filter(monitor => monitor.id !== monitorId));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to delete monitor ${monitorId}`);
+        }
+        setMonitors(monitors.filter((monitor) => monitor.id !== monitorId));
       })
-      .catch(error => console.error(`Error deleting monitor ${monitorId}:`, error));
+      .catch((error) => console.error(error));
   };
 
   const handleEdit = (monitorId) => {
-    const monitor = monitors.find(m => m.id === monitorId);
+    const monitor = monitors.find((m) => m.id === monitorId);
     setEditingMonitor(monitor);
   };
 
   const handleSave = (updatedMonitor) => {
     const token = localStorage.getItem('token');
-    axios.put(`https://localhost:3000/api/url_monitors/${updatedMonitor.id}`, { url_monitor: updatedMonitor }, {
+    fetch(`https://localhost:3000/api/url_monitors/${updatedMonitor.id}`, {
+      method: 'PUT',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ url_monitor: updatedMonitor }),
     })
-      .then(response => {
-        setMonitors(monitors.map(m => (m.id === updatedMonitor.id ? response.data : m)));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to update monitor');
+        }
+        return response.json();
+      })
+      .then((updatedMonitorData) => {
+        setMonitors(
+          monitors.map((monitor) =>
+            monitor.id === updatedMonitor.id ? updatedMonitorData : monitor
+          )
+        );
         setEditingMonitor(null);
       })
-      .catch(error => {
-        console.error('Error updating monitor:', error);
-      });
+      .catch((error) => console.error(error));
   };
 
   const handleAdd = (newMonitor) => {
     const token = localStorage.getItem('token');
-    axios.post('https://localhost:3000/api/url_monitors', { url_monitor: newMonitor }, {
+    fetch('https://localhost:3000/api/url_monitors', {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ url_monitor: newMonitor }),
     })
-      .then(response => {
-        setMonitors([...monitors, response.data]);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to add monitor');
+        }
+        return response.json();
+      })
+      .then((newMonitorData) => {
+        setMonitors([...monitors, newMonitorData]);
         setAddingMonitor(false);
       })
-      .catch(error => {
-        console.error('Error adding monitor:', error);
-      });
+      .catch((error) => console.error(error));
   };
 
   const getStatusClass = (status) => {
@@ -171,21 +206,35 @@ const Dashboard = () => {
           <p>No URLs are being monitored. Please add a monitor to get started.</p>
         </div>
       ) : (
-        filteredMonitors.map(monitor => (
+        filteredMonitors.map((monitor) => (
           <div key={monitor.id} className="monitor">
             <div className="monitor-details">
               <h2>{monitor.name}</h2>
               <p>URL: {monitor.url}</p>
-              <p>Status: <span className={getStatusClass(monitor.status)}>{monitor.status || 'Unknown'}</span></p>
-              <p>Last Checked: {monitor.last_checked_at ? new Date(monitor.last_checked_at).toLocaleString() : 'Never'}</p>
+              <p>
+                Status:{' '}
+                <span className={getStatusClass(monitor.status)}>
+                  {monitor.status || 'Unknown'}
+                </span>
+              </p>
+              <p>
+                Last Checked:{' '}
+                {monitor.last_checked_at
+                  ? new Date(monitor.last_checked_at).toLocaleString()
+                  : 'Never'}
+              </p>
               <button onClick={() => toggleChartVisibility(monitor.id)}>
                 {visibleCharts[monitor.id] ? 'Hide Chart' : 'Show Chart'}
               </button>
               {visibleCharts[monitor.id] && <Line data={getChartData(monitor.id)} />}
             </div>
             <div className="monitor-buttons">
-              <button onClick={() => handleEdit(monitor.id)} className="edit-button">Edit</button>
-              <button onClick={() => handleDelete(monitor.id)} className="delete-button">Remove</button>
+              <button onClick={() => handleEdit(monitor.id)} className="edit-button">
+                Edit
+              </button>
+              <button onClick={() => handleDelete(monitor.id)} className="delete-button">
+                Remove
+              </button>
             </div>
           </div>
         ))

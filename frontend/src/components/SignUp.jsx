@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
@@ -13,21 +12,36 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:3000/api/users', {
-        user: {
-          email,
-          password,
-          password_confirmation: passwordConfirmation,
+      const response = await fetch('https://localhost:3000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          user: {
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+          },
+        }),
       });
-      setMessage(response.data.message);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errors = errorData.errors;
+        if (errors && Array.isArray(errors)) {
+          setMessage(errors.join(', '));
+        } else {
+          setMessage('An error occurred: ' + JSON.stringify(errorData));
+        }
+        return;
+      }
+
+      const data = await response.json();
+      setMessage(data.message || 'Account created successfully!');
       navigate('/login');
     } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.errors.join(', '));
-      } else {
-        setMessage('An error occurred. Please try again.');
-      }
+      setMessage('An unexpected error occurred. Please try again.');
     }
   };
 
